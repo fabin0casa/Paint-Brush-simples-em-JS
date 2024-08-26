@@ -789,6 +789,7 @@ let buffer;
 
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
+  pixelDensity(1); //solução temporaria para bug no balde de tinta, quando se tenta fazer o uso do balde de tinta em uma resolução menor fica errado
   paintWindow = new PaintWindow(
     0,
     0,
