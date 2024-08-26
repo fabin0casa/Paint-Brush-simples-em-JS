@@ -697,59 +697,58 @@ class Canvas {
   paint(x, y) {
     const newColor = color(currentColor);
     this.buffer.loadPixels();
-    let targetColor = this.buffer.get(x, y);
+    const targetColor = this.buffer.get(x, y);
 
-    // Se a nova cor e o ponto selecionado forem da mesma cor, faz nada
-    let isSame = this.colorsEqual(targetColor, newColor, 0);
-    if (isSame) {
-      return;
+    // Converte a nova cor e a cor alvo para RGB
+    const newColorRGB = [red(newColor), green(newColor), blue(newColor)];
+    const targetColorRGB = [red(targetColor), green(targetColor), blue(targetColor)];
+
+    // Checa se a cor alvo é igual à nova cor
+    if (this.colorsEqual(targetColorRGB, newColorRGB, 0)) {
+        this.buffer.updatePixels();
+        return;
     }
 
-    let pixelVisited = new Set();
-    let queue = [[x, y]];
+    const width = this.buffer.width;
+    const height = this.buffer.height;
+    const pixelVisited = new Uint8Array(width * height);
+    const stack = [[x, y]];
 
-    const shouldColorPixel = (x1, y1) => {
-      if (
-        x1 < 0 ||
-        y1 < 0 ||
-        x1 > this.buffer.width ||
-        y1 > this.buffer.height
-      ) {
-        return false;
-      }
+    // Obtemos a matriz de pixels diretamente para atualizações em lote
+    const pixels = this.buffer.pixels;
 
-      let idx = y1 * this.buffer.width + x1;
-      if (pixelVisited.has(idx)) {
-        return false;
-      }
+    while (stack.length > 0) {
+        const [cx, cy] = stack.pop();
+        const idx = cy * width + cx;
 
-      let thisColor = this.buffer.get(x1, y1);
-      return this.colorsEqual(thisColor, targetColor);
-    };
+        if (cx < 0 || cy < 0 || cx >= width || cy >= height) continue;
+        if (pixelVisited[idx]) continue;
 
-    while (queue.length > 0) {
-      let [x, y] = queue.shift();
-      let idx = y * this.buffer.width + x;
+        pixelVisited[idx] = 1;
 
-      if (!pixelVisited.has(idx)) {
-        this.buffer.set(x, y, newColor);
-        pixelVisited.add(idx);
-
-        // Define as 4 direções a serem checadas
-        let directions = [
-          [0, -1],
-          [1, 0],
-          [0, 1],
-          [-1, 0],
+        const pixelIndex = idx * 4; // Assuming 4 channels: RGBA
+        const pixelColorRGB = [
+            pixels[pixelIndex],         // Red
+            pixels[pixelIndex + 1],     // Green
+            pixels[pixelIndex + 2]      // Blue
         ];
 
-        for (let [xOffset, yOffset] of directions) {
-          if (shouldColorPixel(x + xOffset, y + yOffset)) {
-            queue.push([x + xOffset, y + yOffset]);
-          }
-        }
-      }
+        if (!this.colorsEqual(pixelColorRGB, targetColorRGB, 0)) continue;
+
+        // Atualiza a cor na matriz de pixels
+        pixels[pixelIndex] = newColorRGB[0];     // Red
+        pixels[pixelIndex + 1] = newColorRGB[1]; // Green
+        pixels[pixelIndex + 2] = newColorRGB[2]; // Blue
+
+        // Adiciona os pixels vizinhos à pilha
+        if (cx + 1 < width && !pixelVisited[cy * width + (cx + 1)]) stack.push([cx + 1, cy]);
+        if (cx - 1 >= 0 && !pixelVisited[cy * width + (cx - 1)]) stack.push([cx - 1, cy]);
+        if (cy + 1 < height && !pixelVisited[(cy + 1) * width + cx]) stack.push([cx, cy + 1]);
+        if (cy - 1 >= 0 && !pixelVisited[(cy - 1) * width + cx]) stack.push([cx, cy - 1]);
     }
+
+    // Atualiza o buffer com a matriz de pixels modificada
+    this.buffer.pixels = pixels;
     this.buffer.updatePixels();
     this.replaceBufferWithFreshCanvas();
   }
@@ -784,8 +783,6 @@ class Canvas {
     );
   }
 }
-
-
 
 let canvas;
 let buffer;
