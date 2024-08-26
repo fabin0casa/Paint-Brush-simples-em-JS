@@ -2,7 +2,7 @@
 
 Este projeto é uma aplicação inspirada no MS Paint original, desenvolvida usando a biblioteca [p5.js](https://p5js.org/). Ele oferece uma tela onde os usuários podem desenhar com diversas cores e ferramentas, uma paleta para selecionar as cores, e uma barra de ferramentas para escolher diferentes ferramentas de desenho.
 
-## Features
+## Funcionalidades
 
 - **Desenho no Canvas**: Desenhe livremente na tela usando a ferramenta e cor selecionadas.
 - **Paleta de Cores**: Escolha as cores a partir da paleta para utilizar no desenho.
