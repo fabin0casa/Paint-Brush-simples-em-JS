@@ -1,13 +1,13 @@
 # Projeto Paint usando p5.js
 
-Este projeto é uma aplicação baseada no MS Paint original, usando a biblioteca [p5.js](https://p5js.org/). Apresenta uma Tela onde os usuários podem desenhar com variadas cores e ferramentas, a paleta para selecionar as cores, e a barra de ferramentas para selecionar diferentes ferramentas de desenho.
+Este projeto é uma aplicação inspirada no MS Paint original, desenvolvida usando a biblioteca [p5.js](https://p5js.org/). Ele oferece uma tela onde os usuários podem desenhar com diversas cores e ferramentas, uma paleta para selecionar as cores, e uma barra de ferramentas para escolher diferentes ferramentas de desenho.
 
 ## Features
 
-- **Canvas Drawing**: Desenhar livremente na tela com a ferramenta e cor selecionadas.
-- **Color Palette**: Escolher a partir da paleta a cor para usar no desenho.
-- **Toolbar**: Selecionar diferentes ferramentas para o desenho, tais como, pincel, borracha e outros.
-- **Interface Dinamica**: Os elementos são gerados dinamicamente com o JavaScript, assegurando flexibilidade e escalabilidade
+- **Desenho no Canvas**: Desenhe livremente na tela usando a ferramenta e cor selecionadas.
+- **Paleta de Cores**: Escolha as cores a partir da paleta para utilizar no desenho.
+- **Barra de Ferramentas**: Selecione diferentes ferramentas de desenho, como pincéis, borrachas e outras.
+- **Interface Dinamica**: Os elementos são gerados dinamicamente com JavaScript, garantindo flexibilidade e escalabilidade.
 
 ## Insperações
 
