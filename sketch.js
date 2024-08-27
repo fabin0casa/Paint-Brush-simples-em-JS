@@ -486,6 +486,7 @@ class Canvas {
   resizeBuffer(newWidth, newHeight) {
     this.w = newWidth;
     this.h = newHeight;
+    this.setBufferPixelDensity(1);
     this.buffer = createGraphics(newWidth, newHeight);
     this.buffer.background("white");
   }
@@ -697,7 +698,12 @@ class Canvas {
   paint(x, y) {
     const newColor = color(currentColor);
     this.buffer.loadPixels();
-    const targetColor = this.buffer.get(x, y);
+    const pixelDensity = this.buffer.pixelDensity();
+
+    // Normaliza as coordenadas de entrada para lidar com densidade de pixels
+    const normalizedX = Math.floor(x * pixelDensity);
+    const normalizedY = Math.floor(y * pixelDensity);
+    const targetColor = this.buffer.get(normalizedX, normalizedY);
 
     // Converte a nova cor e a cor alvo para RGB
     const newColorRGB = [red(newColor), green(newColor), blue(newColor)];
@@ -709,12 +715,11 @@ class Canvas {
         return;
     }
 
-    const width = this.buffer.width;
-    const height = this.buffer.height;
+    const width = this.buffer.width * pixelDensity;
+    const height = this.buffer.height * pixelDensity;
     const pixelVisited = new Uint8Array(width * height);
-    const stack = [[x, y]];
+    const stack = [[normalizedX, normalizedY]];
 
-    // Obtemos a matriz de pixels diretamente para atualizações em lote
     const pixels = this.buffer.pixels;
 
     while (stack.length > 0) {
@@ -726,7 +731,7 @@ class Canvas {
 
         pixelVisited[idx] = 1;
 
-        const pixelIndex = idx * 4; // Assuming 4 channels: RGBA
+        const pixelIndex = idx * 4;
         const pixelColorRGB = [
             pixels[pixelIndex],         // Red
             pixels[pixelIndex + 1],     // Green
@@ -736,22 +741,20 @@ class Canvas {
         if (!this.colorsEqual(pixelColorRGB, targetColorRGB, 0)) continue;
 
         // Atualiza a cor na matriz de pixels
-        pixels[pixelIndex] = newColorRGB[0];     // Red
-        pixels[pixelIndex + 1] = newColorRGB[1]; // Green
-        pixels[pixelIndex + 2] = newColorRGB[2]; // Blue
+        pixels[pixelIndex] = newColorRGB[0];
+        pixels[pixelIndex + 1] = newColorRGB[1];
+        pixels[pixelIndex + 2] = newColorRGB[2];
 
         // Adiciona os pixels vizinhos à pilha
-        if (cx + 1 < width && !pixelVisited[cy * width + (cx + 1)]) stack.push([cx + 1, cy]);
-        if (cx - 1 >= 0 && !pixelVisited[cy * width + (cx - 1)]) stack.push([cx - 1, cy]);
-        if (cy + 1 < height && !pixelVisited[(cy + 1) * width + cx]) stack.push([cx, cy + 1]);
-        if (cy - 1 >= 0 && !pixelVisited[(cy - 1) * width + cx]) stack.push([cx, cy - 1]);
+        stack.push([cx + 1, cy]);
+        stack.push([cx - 1, cy]);
+        stack.push([cx, cy + 1]);
+        stack.push([cx, cy - 1]);
     }
 
-    // Atualiza o buffer com a matriz de pixels modificada
-    this.buffer.pixels = pixels;
     this.buffer.updatePixels();
     this.replaceBufferWithFreshCanvas();
-  }
+}
 
   // Método para ajudar a normalizar as cores
   normalizeColor(color) {
@@ -789,7 +792,7 @@ let buffer;
 
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
-  pixelDensity(1); //solução temporaria para bug no balde de tinta, quando se tenta fazer o uso do balde de tinta em uma resolução menor fica errado
+  //pixelDensity(1);
   paintWindow = new PaintWindow(
     0,
     0,
@@ -799,6 +802,7 @@ function setup() {
   );
   buffer = createGraphics(width, height);
 }
+
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
