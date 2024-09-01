@@ -338,7 +338,6 @@ class ToolbarButton extends Button {
   }
 }
 
-
 class Toolbar {
   constructor(x, y, w, h) {
     this.x = x;
@@ -792,7 +791,6 @@ let buffer;
 
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
-  //pixelDensity(1);
   paintWindow = new PaintWindow(
     0,
     0,
@@ -802,7 +800,6 @@ function setup() {
   );
   buffer = createGraphics(width, height);
 }
-
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
