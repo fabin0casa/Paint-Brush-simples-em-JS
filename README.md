@@ -9,7 +9,7 @@ Este projeto é uma aplicação inspirada no MS Paint original, desenvolvida usa
 - **Barra de Ferramentas**: Selecione diferentes ferramentas de desenho, como pincéis, borrachas e outras.
 - **Interface Dinamica**: Os elementos são gerados dinamicamente com JavaScript, garantindo flexibilidade e escalabilidade.
 
-## Insperações
+## Inspirações
 
 Este projeto foi desenvolvido com base em um [vídeo tutorial do YouTube](www.youtube.com/watch?v=wRWGUxQpDZY), que forneceu a estrutura e as orientações principais para a construção do projeto. Agradeço ao criador do tutorial pela inspiração e pelo suporte.
 
