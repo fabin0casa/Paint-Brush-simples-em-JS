@@ -1,4 +1,5 @@
-# Projeto Paint usando p5.js
+# Projeto Paint usando p5.js <img src="https://github.com/user-attachments/assets/9876fbae-6aaf-4704-be26-998d3631bf8b" alt="paint" width="55" height="50">
+
 
 Este projeto é uma aplicação inspirada no MS Paint original, desenvolvida usando a biblioteca [p5.js](https://p5js.org/). Ele oferece uma tela onde os usuários podem desenhar com diversas cores e ferramentas, uma paleta para selecionar as cores, e uma barra de ferramentas para escolher diferentes ferramentas de desenho.
 
