@@ -791,6 +791,7 @@ let buffer;
 
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
+  pixelDensity(1);
   paintWindow = new PaintWindow(
     0,
     0,
